@@ -1,0 +1,36 @@
+#!/bin/bash
+echo "______________SCRIPT START______________"
+s3_name=aliaksandr-bulhak-for-ec2
+
+echo "______________update yum, install and set python3, download and install pip______________"
+yum update -y
+yum install python3 -y
+alternatives --set python /usr/bin/python3
+curl -O https://bootstrap.pypa.io/get-pip.py
+sudo -u ec2-user python3 get-pip.py
+sudo -u ec2-user /home/ec2-user/.local/bin/pip install pipenv
+
+echo "______________sync project from s3 to /usr/local/bin, sync pipenv, chmod +x gunicorn______________"
+cd /usr/local/bin/
+aws s3 sync s3://$s3_name/deploy/app/ .
+cd aws_training_app
+sudo -u ec2-user /home/ec2-user/.local/bin/pipenv shell
+sudo -u ec2-user /home/ec2-user/.local/bin/pipenv sync
+chmod +x /home/ec2-user/.local/share/virtualenvs/*/bin/gunicorn
+
+echo "______________add gunicorn to systemctl: copy from s3 python sript, run script to create systemctl service, systemctl start/enable service______________"
+cd /etc/systemd/system
+aws s3 cp s3://$s3_name/deploy/extra_files/systemctl_gunicorn_service_creator.py systemctl_gunicorn_service_creator.py
+python3 systemctl_gunicorn_service_creator.py
+systemctl start aws_app_g
+systemctl enable aws_app_g
+
+echo "______________install nginx, systemctl start/enable nginx, copy from s3 conf file to nginx/default.d, systemctl reload nginx______________"
+amazon-linux-extras install nginx1 -y
+systemctl start nginx
+systemctl enable nginx
+cd /etc/nginx/default.d
+aws s3 cp s3://$s3_name/deploy/extra_files/aws_training_app.conf aws_training_app.conf
+systemctl reload nginx
+
+echo "______________SCRIPT FINISH______________"

@@ -1,0 +1,3 @@
+sam build
+sam package --s3-bucket aliaksandr-bulhak-labmda
+sam deploy --stack-name aliaksandr-bulhak-lambda-v1 --s3-bucket aliaksandr-bulhak-labmda

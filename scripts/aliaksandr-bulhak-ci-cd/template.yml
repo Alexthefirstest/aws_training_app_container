@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Resources:
+  LambdaApplication:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      PackageType: Zip
+      Handler: lambda_sns_sqs_handler_f.lambda_sns_sqs_handler.lambda_handler
+      Runtime: python3.8
+      MemorySize: 512
+      Timeout: 30
+      Role: arn:aws:iam::763233212644:role/aliaksandr-bulhak-sqs-sns
+      Environment:
+        Variables:
+          AWS_DEFAULT_REGION_CUSTOM: us-west-2
+          SNS_TOPIC_ARN: arn:aws:sns:us-west-2:763233212644:aliaksanddr-bulhak-cicd-sns
+          SQS_QUEUE_URL: https://sqs.us-west-2.amazonaws.com/763233212644/aliaksandr-bulhak-cicd-sqs

@@ -1,0 +1,13 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+  post_build:
+    commands:
+      - sam build
+      - sam package --s3-bucket aliaksandr-bulhak-labmda --output-template-file packaged.yaml
+artifacts:
+  files:
+    - packaged.yaml

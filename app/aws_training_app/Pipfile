@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+importlib-metadata = "*"
+typing-extensions = "*"
+gunicorn = "*"
+mysql-connector-python = "*"
+boto3 = "*"
+werkzeug = "*"
+requests = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3"
