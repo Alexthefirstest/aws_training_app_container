@@ -2,9 +2,11 @@
 
 #
 Image processing application: allow user to add image and store it in s3, store image metadata in rds (sql table)
+
 Adding image code adds an event to sqs that will be read by labmda and sent as a notification to subscribers using sns.
 
 There are additional scripts for use with: cloudformation, ec2 userdata, labmdas and aws ci-cd.
+
 Additional files for deployment needs: gunicorn (linux autoloader) and nginx configurations files.
 
 Application can also return aws region and availability zone
